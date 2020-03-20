@@ -7,14 +7,9 @@ const listHandler = document.querySelector('.list-handler')
 const invisibleHandler = document.getElementById('invisible-handler')
 
 // Functions
-function addTask() {
 
-    if(taskContainer.value.length > 25){
-        taskContainer.value = "TASK TOO LONG!!!"
-        setTimeout(()=>{
-            taskContainer.value = ""
-        }, 3000)
-    }else{
+function appendElement(taskValue) {
+
         let newListElement = document.createElement('li');
         let newCheckbox = document.createElement('input');
         let newP = document.createElement('p');
@@ -27,80 +22,74 @@ function addTask() {
         newListElement.appendChild(newCheckbox);
         newListElement.appendChild(newP);
 
-        newP.innerText = taskContainer.value;
+        newP.innerText = taskValue;
 
         taskContainer.value = '';
 
+
         const checkbox = document.querySelectorAll('input[type=checkbox]')
-        console.log(checkbox);
         checkbox.forEach(el => {
            el.addEventListener('click', ()=> {
                el.parentElement.remove()
            })
         })
+
+};
+
+function addTask() {
+
+    if(taskContainer.value.length > 25 ){
+        taskContainer.value = "TASK TOO LONG!!!"
+        setTimeout(()=>{
+            taskContainer.value = ""
+        }, 2500)
+    }else if(taskContainer.value === ''){
+        taskContainer.value = "What's the task? Hmm?"
+        setTimeout(()=>{
+            taskContainer.value = ""
+        }, 2500)
+    }else{
+        postTask()
+        appendElement(taskContainer.value)
     }
 
 }
-// Events
 
-submit.addEventListener('click', addTask);
 
 // DATA for tasks
 function getTask(){
 
-    fetch('task.json')
+    fetch('http://localhost:3000/tasks')
     .then(res => res.json())
-    .then((data) => data.forEach(el => {
-        
-        let newListElement = document.createElement('li');
-        let newCheckbox = document.createElement('input');
-        let newP = document.createElement('p');
-
-        newListElement.className = 'list-element'
-
-        listHandler.insertBefore(newListElement, invisibleHandler)
-
-        newCheckbox.setAttribute('type', 'checkbox');
-        newListElement.appendChild(newCheckbox);
-        newListElement.appendChild(newP);
-
-        newP.innerText = el.task;
-
-        taskContainer.value = '';
-
-        const checkbox = document.querySelectorAll('input[type=checkbox]')
-        console.log(checkbox);
-        checkbox.forEach(el => {
-           el.addEventListener('click', ()=> {
-               el.parentElement.remove()
-           })
-        })
-    }
-        ))
+    .then((data) => Array.from(data, el => appendElement(el.task)) )
 
 }
 
-getTask()
+function postTask(){
 
-// function postTask(task){
+    fetch("http://localhost:3000/tasks", {
+        method:'POST',
+        headers:{
+
+            'Content-type': "application/json"
+        },
+        body: JSON.stringify({
+            task: taskContainer.value
+        }),   
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            // console.log(data)
+            getTask();
+
+    })
+}
 
 
-//     const sending = (task) => {
-//         fetch('http://localhost:3000/tasks',{
-//         method: 'POST',
-//         headers:{
-//             'Content-type': "application/json"
-//         },
-//         body: JSON.stringify({
-//             task: task
-//         }),
-//         }
-//     )
-//     .then(res => console.log(res.text))
-//     .then(data => {
-//         getTask();
-//         console.log(data)})
-//     }
-//     sending(task)
-// }
-// postTask()
+// Events
+
+submit.addEventListener('click', addTask);
+
+getTask();
