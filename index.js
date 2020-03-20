@@ -3,32 +3,56 @@ const submit = document.getElementById('submit');
 const listElement = document.getElementById('list-element')
 const p = document.getElementById('to-do-task')
 const listHandler = document.querySelector('.list-handler')
-const checkbox = document.querySelector('input[type="checkbox"]');
+
+const invisibleHandler = document.getElementById('invisible-handler')
 
 // Functions
 function addTask() {
 
-    console.log(p.innerHTML)
-    if(p.innerHTML === ''){
-        p.innerHTML = taskContainer.value;
-    }else {
-        let newListElement = listElement.cloneNode(true)
-        listHandler.insertBefore(newListElement, listElement)
-        p.innerHTML = taskContainer.value;
+    if(taskContainer.value.length > 25){
+        taskContainer.value = "TASK TOO LONG!!!"
+        setTimeout(()=>{
+            taskContainer.value = ""
+        }, 3000)
+    }else{
+        let newListElement = document.createElement('li');
+        let newCheckbox = document.createElement('input');
+        let newP = document.createElement('p');
+
+        newListElement.className = 'list-element'
+
+        listHandler.insertBefore(newListElement, invisibleHandler)
+
+        newCheckbox.setAttribute('type', 'checkbox');
+        newListElement.appendChild(newCheckbox);
+        newListElement.appendChild(newP);
+
+        newP.innerText = taskContainer.value;
+        // let newCheckbox = document.createElement('input')
+        // let newP = document.createElement('p')
+        // newListElement.parentNode(newCheckbox)
+        // p.innerHTML = taskContainer.value;
+        taskContainer.value = '';
+
+        const checkbox = document.querySelectorAll('input[type=checkbox]')
+        console.log(checkbox);
+        checkbox.forEach(el => {
+           el.addEventListener('click', ()=> {
+               el.parentElement.remove()
+           })
+        })
     }
-   taskContainer.value = '';
+
+        
 
 }
 
 function removeTask(){
-    // console.log(this.parentElement)
-    // this.parentElement.remove();
-    // return
-    this.parentElement.style.display = 'none'
-    return this
+
+
 }
+
 // Events
 
 submit.addEventListener('click', addTask);
 
-checkbox.addEventListener('click', removeTask);

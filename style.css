@@ -98,6 +98,7 @@ input[type="submit"]{
     appearance: none;
     background-color: #fff;
     border: 0;
+    /* position: absolute; */
     cursor: pointer;
     font-size: 2rem;
 }
@@ -107,7 +108,9 @@ input[type="submit"]:focus{
     background-color: black;
     color: #fff
 }
-
+.invisible-handler{
+    display: none;
+}
 
 
 p{
