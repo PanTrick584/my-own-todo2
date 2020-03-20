@@ -28,10 +28,7 @@ function addTask() {
         newListElement.appendChild(newP);
 
         newP.innerText = taskContainer.value;
-        // let newCheckbox = document.createElement('input')
-        // let newP = document.createElement('p')
-        // newListElement.parentNode(newCheckbox)
-        // p.innerHTML = taskContainer.value;
+
         taskContainer.value = '';
 
         const checkbox = document.querySelectorAll('input[type=checkbox]')
@@ -43,16 +40,67 @@ function addTask() {
         })
     }
 
-        
-
 }
-
-function removeTask(){
-
-
-}
-
 // Events
 
 submit.addEventListener('click', addTask);
 
+// DATA for tasks
+function getTask(){
+
+    fetch('task.json')
+    .then(res => res.json())
+    .then((data) => data.forEach(el => {
+        
+        let newListElement = document.createElement('li');
+        let newCheckbox = document.createElement('input');
+        let newP = document.createElement('p');
+
+        newListElement.className = 'list-element'
+
+        listHandler.insertBefore(newListElement, invisibleHandler)
+
+        newCheckbox.setAttribute('type', 'checkbox');
+        newListElement.appendChild(newCheckbox);
+        newListElement.appendChild(newP);
+
+        newP.innerText = el.task;
+
+        taskContainer.value = '';
+
+        const checkbox = document.querySelectorAll('input[type=checkbox]')
+        console.log(checkbox);
+        checkbox.forEach(el => {
+           el.addEventListener('click', ()=> {
+               el.parentElement.remove()
+           })
+        })
+    }
+        ))
+
+}
+
+getTask()
+
+// function postTask(task){
+
+
+//     const sending = (task) => {
+//         fetch('http://localhost:3000/tasks',{
+//         method: 'POST',
+//         headers:{
+//             'Content-type': "application/json"
+//         },
+//         body: JSON.stringify({
+//             task: task
+//         }),
+//         }
+//     )
+//     .then(res => console.log(res.text))
+//     .then(data => {
+//         getTask();
+//         console.log(data)})
+//     }
+//     sending(task)
+// }
+// postTask()
