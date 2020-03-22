@@ -25,14 +25,22 @@ function appendElement(taskValue) {
         newP.innerText = taskValue;
 
         taskContainer.value = '';
-
-
+        // Removing element afther click, should remove either JSON element somehow
         const checkbox = document.querySelectorAll('input[type=checkbox]')
-        checkbox.forEach(el => {
-           el.addEventListener('click', ()=> {
-               el.parentElement.remove()
-           })
-        })
+        Array.from(checkbox, (el, id) => {
+            el.setAttribute('id', id+1);
+            console.log(el.id)
+    })
+
+        // console.log(checkbox)
+        Array.from(checkbox, el=> {
+            el.addEventListener('click', (e)=> {
+                e.preventDefault()
+                el.parentElement.remove() 
+                deleteTask(el.id)
+            })
+            
+        });
 
 };
 
@@ -50,7 +58,6 @@ function addTask() {
         }, 2500)
     }else{
         postTask()
-        appendElement(taskContainer.value)
     }
 
 }
@@ -70,26 +77,41 @@ function postTask(){
     fetch("http://localhost:3000/tasks", {
         method:'POST',
         headers:{
-
             'Content-type': "application/json"
         },
         body: JSON.stringify({
-            task: taskContainer.value
+            task: taskContainer.value,
         }),   
     })
         .then((response) => {
             return response.json()
         })
         .then((data) => {
-            // console.log(data)
+            console.log(data)
             getTask();
 
     })
 }
 
+function deleteTask(id){
+
+    fetch("http://localhost:3000/tasks/"+id, {
+        method:'DELETE',
+        headers:{
+               'Content-type': "application/json"
+        }
+        })
+         .then((response) => {
+            return response.json()
+        })
+         .then((data) => {
+             console.log(data) 
+     }).catch(err => console.log(err))
+}
 
 // Events
 
 submit.addEventListener('click', addTask);
 
+// GEt task on start of functionality
 getTask();

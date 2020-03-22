@@ -1,20 +1,3 @@
 {
-  "tasks": [
-    {
-      "task": "Jula ma jutro rano umyć zęby",
-      "id": 1
-    },
-    {
-      "task": "ćwiczenia",
-      "id": 2
-    },
-    {
-      "task": "temperówka i starłorsy",
-      "id": 3
-    },
-    {
-      "task": "Zęby pod poduszką",
-      "id": 4
-    }
-  ]
+  "tasks": []
 }
