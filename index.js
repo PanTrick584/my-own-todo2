@@ -23,6 +23,7 @@ function appendElement(taskValue) {
         newListElement.appendChild(newP);
 
         newP.innerText = taskValue;
+        newCheckbox.innerText = "DONE?"
 
         taskContainer.value = '';
         // Removing element afther click, should remove either JSON element somehow
@@ -46,7 +47,7 @@ function appendElement(taskValue) {
 
 function addTask() {
 
-    if(taskContainer.value.length > 25 ){
+    if(taskContainer.value.length > 35 ){
         taskContainer.value = "TASK TOO LONG!!!"
         setTimeout(()=>{
             taskContainer.value = ""
@@ -61,7 +62,6 @@ function addTask() {
     }
 
 }
-
 
 // DATA for tasks
 function getTask(){

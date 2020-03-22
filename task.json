@@ -1,3 +1,8 @@
 {
-  "tasks": []
+  "tasks": [
+    {
+      "task": "Zjeść obiad",
+      "id": 3
+    }
+  ]
 }
